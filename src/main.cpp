@@ -57,7 +57,7 @@ void loop()
             case 0: mode_0_enter(&fb); break;
             case 1: mode_1_enter(&fb); break;
             case 2: mode_2_enter(&fb); break;
-            case 3: mode_0_enter(&fb); break;
+            case 3: mode_3_enter(&fb); break;
             case 4: mode_4_enter(&fb, &tft); break;
         }
     }
