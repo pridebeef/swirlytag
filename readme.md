@@ -18,7 +18,7 @@ Search terms:
   * Roughly $25  
   * Make sure it doesn't have soldered pins!   
   * (you don't want these, and they sell both kinds)  
-    * -- img --  
+    * Example: ![no pins](https://raw.githubusercontent.com/pridebeef/swirlytag/main/docs/pins.png) 
 * `3.7V Lithium Rechargeable Battery JST1.25 Connector 2pin, 952540 3.7V 1000mAh Battery`  
   * Roughly $20 for a 4-pack  
   * Guaranteed to work and be convenient   
@@ -31,6 +31,8 @@ and some string or a clamp.
 I used a Lilygo T-Display-S3 and recommend it.  
 Specifically, the version **without** soldered pins sticking out.   
 It works with or without the touch screen, so either version will work.  
+
+![touch](https://raw.githubusercontent.com/pridebeef/swirlytag/main/docs/touch.png)
 
 Boards ending in C3 and AMOLED screens have similar names but won't work out of the box.  
 
@@ -59,7 +61,7 @@ Any collar that's tall enough should work. The recommended display below is 2.5c
 
 I attached mine with black string as follows, with the battery already plugged in.
 
--- img --
+![example](https://raw.githubusercontent.com/pridebeef/swirlytag/main/docs/string.png)
 
 and then I tied the strings together with a fisherman's knot, which there are plenty of guides for. 
 
@@ -86,6 +88,8 @@ Drop me a line if you made one, I'm all ears to hear if it worked as easy as it 
 
 The general purpose button switches through all the available drawing modes.   
 The last one is a sleep mode that exists to conserve battery rather than run it down.  
+
+![Buttons](https://raw.githubusercontent.com/pridebeef/swirlytag/main/docs/buttons.png)
 
 ## Troubleshooting 
  
