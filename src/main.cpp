@@ -5,7 +5,12 @@
 #include "swirl.h"
 #include "modes.h"
 
-#define debug 
+//#define debug 
+
+//#define demo_mode
+#ifdef demo_mode
+const static uint64_t frames[] = {};
+#endif
 
 TFT_eSPI tft = TFT_eSPI();  
 
@@ -33,7 +38,7 @@ void setup(void)
     digitalWrite(15, HIGH); 
     ledcSetup(0, 10000, 8);
     ledcAttachPin(38, 0);
-    ledcWrite(0, 128); // 0..255 
+    ledcWrite(0, 255); // 0..255 
 
     tft.init();
     tft.fillScreen(TFT_BLACK);
@@ -41,6 +46,8 @@ void setup(void)
     tft.setRotation(3);
 
     prev_time = millis();
+
+    esp_sleep_enable_ext0_wakeup(GPIO_NUM_14, 0);
 }
 
 void loop()
@@ -54,30 +61,45 @@ void loop()
     // vtable-based state machine was too tricky for args changing between modes and i'm lazy 
     if (mode != last_mode) {
         switch (mode) {
-            case 0: mode_0_enter(&fb); break;
+            case 0: mode_0_enter(&fb, &tft); break;
             case 1: mode_1_enter(&fb); break;
             case 2: mode_2_enter(&fb); break;
             case 3: mode_3_enter(&fb); break;
-            case 4: mode_4_enter(&fb, &tft); break;
+            case 4: mode_4_enter(&fb); break;
         }
     }
 
     switch(mode) {
         case 0: mode_0_update(&fb, frame); break;
         case 1: mode_1_update(&fb, frame); break;
-        case 2: mode_2_update(&fb, &tft, frame); break;
-        case 3: mode_3_update(&fb, frame); break;
+        case 2: mode_2_update(&fb, frame); break;
+        case 3: mode_3_update(&fb, &tft, frame); break;
         case 4: mode_4_update(&fb, frame); break;
     }
     
     last_mode = mode;
-    if (digitalRead(BUTTON_PIN) == 0 && !button_reset_trigger) {
-        mode = (mode + 1) % NUM_MODES; 
+    if (digitalRead(BUTTON_PIN) == 0 ) {
         button_reset_trigger = 1;
     }
-    if (digitalRead(BUTTON_PIN) == 1) {
+    if (digitalRead(BUTTON_PIN) == 1 && button_reset_trigger) {
+        mode += 1;
+        if (mode == NUM_MODES) {
+            tft.setTextColor(TFT_WHITE);
+            tft.fillScreen(TFT_BLACK);
+            tft.drawString("going to sleep", 0, 0, 4);
+            tft.drawString("press again to wake", 0, 40, 4);
+            delay(2500);
+            esp_deep_sleep_start();
+        }
+        mode = mode % NUM_MODES; 
         button_reset_trigger = 0;
     }
+
+    #ifdef demo_mode
+    for (int i = 0; i <= NUM_MODES; ++i) {
+        if (frame == frames[i]) mode = (mode + 1) % NUM_MODES;
+    }
+    #endif 
 
     #ifdef debug
         uint32_t midpoint = millis() - ts;
